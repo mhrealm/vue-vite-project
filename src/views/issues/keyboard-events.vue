@@ -55,6 +55,8 @@ onUnmounted(() => {
 
 <route lang="json">{
   "meta": {
-    "title": "vue如何监听键盘事件？"
+    "title": "如何监听键盘事件？",
+    "category": "Vue",
+    "tag": "基础交互"
   }
 }</route>
