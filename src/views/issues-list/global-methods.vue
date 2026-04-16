@@ -1,5 +1,4 @@
 <template>
-  <!-- 怎么给vue定义全局的方法？ -->
   <div class="flex-gap-column-10">
     <button @click="handleShowToastClick">点击触发全局提示</button>
     <button @click="handleSayHello">点击说hello</button>
@@ -23,3 +22,10 @@ const handleShowToastClick = () => {
 </script>
 
 <style lang="less" scoped></style>
+
+
+<route lang="json">{
+  "meta": {
+    "title": "vue 如何定义全局的方法？"
+  }
+}</route>

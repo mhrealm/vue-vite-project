@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.5.22",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
@@ -20,6 +20,7 @@
     "less-loader": "^12.3.0",
     "typescript": "~5.9.3",
     "vite": "^7.1.7",
+    "vite-plugin-pages": "^0.33.3",
     "vue-tsc": "^3.1.0"
   }
 }

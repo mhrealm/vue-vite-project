@@ -51,3 +51,10 @@ onUnmounted(() => {
 </script>
 
 <style lang="less"></style>
+
+
+<route lang="json">{
+  "meta": {
+    "title": "vue如何监听键盘事件？"
+  }
+}</route>

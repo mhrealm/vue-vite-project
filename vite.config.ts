@@ -1,10 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import Pages from 'vite-plugin-pages'
 
-// https://vite.dev/config/
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    Pages({
+      // 这里的配置意味着：src/views 下的所有 .vue 文件都会被自动注册为路由
+      dirs: 'src/views',
+      extensions: ['vue'],
+      importMode: 'async'
+    }),
+  ],
   css: {
     preprocessorOptions: {
       less: {

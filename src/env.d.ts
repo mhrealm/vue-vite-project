@@ -5,3 +5,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+declare module '~pages' {
+  import type { RouteRecordRaw } from 'vue-router'
+  const routes: RouteRecordRaw[]
+  export default routes
+}
