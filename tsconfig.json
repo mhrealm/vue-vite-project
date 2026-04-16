@@ -1,18 +1,13 @@
 {
-  // "files": [],
-  // "references": [
-  //   {
-  //     "path": "./tsconfig.app.json"
-  //   },
-  //   {
-  //     "path": "./tsconfig.node.json"
-  //   }
-  // ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "moduleResolution": "bundler", // 现代项目推荐
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ] // 映射 @ 到 src 目录
     }
   },
