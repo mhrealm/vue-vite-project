@@ -1,6 +1,7 @@
 import issues01 from '@/issues-list/issues01.vue'
 import issues02 from '@/issues-list/issues02.vue'
 import issues03 from '@/issues-list/issues03.vue'
+import issues04 from '@/issues-list/issues04.vue'
 
 let issuesList = [
   {
@@ -20,6 +21,12 @@ let issuesList = [
     link: '/issues',
     id: '03',
     component: issues03,
+  },
+  {
+    title: '既生“reactive”,何生“ref”？',
+    link: '/issues',
+    id: '04',
+    component: issues04,
   },
 ]
 

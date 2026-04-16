@@ -1,4 +1,4 @@
-## vue 如何监听键盘事件？
+# vue 如何监听键盘事件？
 
 在 vue 中监听键盘事件可以使用 v-on 配合键盘事件修饰符实现，常见的键盘事件如 keydown，keyup 等。
 
@@ -78,7 +78,7 @@ onUnmounted(() => {
 </script>
 ```
 
-## 怎么给 vue 定义全局的方法？
+# 怎么给 vue 定义全局的方法？
 
 在 vue 中定义全局的方式有很多种，这里主要介绍 vue3 中定义全局方法方式。
 
@@ -148,7 +148,7 @@ const handleSayHello = () => {
 
 注意：上面的 getCurrentInstance 是 Vue 内部 API，官方文档明确指出其主要用于开发 Vue 插件或库，不建议在应用代码中直接使用。
 
-## vue 怎么实现强制刷新组件？
+# vue 怎么实现强制刷新组件？
 
 1. 修改组件的 key 属性（最推荐）
 
@@ -198,3 +198,5 @@ const handleRefresh2 = async () => {
 
 1. 执行 isVisible.value = false 后，组件并不会立即被销毁，DOM 也不会立即更新。
 2. 如果不等待 DOM 实际更新，直接紧接着执行 isVisible.value = true，Vue 会认为这两次数据变化是 “连续的”，可能会优化掉中间的销毁过程（相当于没变化），导致组件不会重新创建。
+
+# 既生“reactive”,何生“ref”？
