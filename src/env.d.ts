@@ -10,3 +10,8 @@ declare module '~pages' {
   const routes: RouteRecordRaw[]
   export default routes
 }
+
+declare module '*.less' {
+  const content: any;
+  export default content;
+}
