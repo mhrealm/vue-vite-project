@@ -1,0 +1,275 @@
+<style>
+  :root {
+    --base: 1920;
+    --page-padding: 24rem;
+    --page-padding-top: 11.2rem;
+    --max-height: calc(100vh - 66px);
+  }
+
+  html {
+    font-size: calc(10 / var(--base) * 100vw);
+  }
+
+  body {
+    background-color: #000;
+  }
+
+  .pc {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  .sticky {
+    position: sticky;
+    height: auto;
+    top: 66px;
+  }
+
+  .floor-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+    color: #fff;
+  }
+
+  .floor-title {
+    font-size: 4.8rem;
+    font-weight: 700;
+    line-height: 1.16;
+  }
+
+  .floor-desc {
+    font-size: 2.4rem;
+    line-height: 1.333;
+    margin-top: 4.8rem;
+  }
+
+  .img-hover {
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .img-hover img {
+    transition: transform 0.2s ease;
+  }
+
+  .img-hover:hover img {
+    transform: scale(1.05);
+  }
+
+  .floor-container .video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .floor3-container {
+    height: 200vh;
+  }
+
+  .floor3-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .floor3-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    width: 50%;
+    pointer-events: none;
+  }
+
+  #chart__container {
+    width: 100%;
+  }
+
+ 
+
+</style>
+
+<section class="floor3-container floor-container">
+  <div class="sticky">
+    <div id="chart__container"></div>
+    <div class="floor3-mask"></div>
+    <div class="floor3-content">
+      <p class="floor-title">REJO в <br class="mobile" />мире</p>
+      <p class="floor-desc">
+        REJO оказывает поддержку более чем 10 000 участникам сообщества по всему миру без каких-либо ограничений и днем, и ночью.<br class="pc">Ценителей REJO можно встретить в Швейцарии, Малайзии, Японии, Эстонии, Южной Корее на Ближнем Востоке и даже в далекой Сибири. У них могут быть разные профессии и жизненные убеждения, но, как и вы, они отличаются яркой индивидуальностью, стойкостью и твердым характером.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="https://d3mgztdcbntlqz.cloudfront.net/about/earth/js/globe.gl.min.js"></script>
+<script>
+  $(function () {
+    const isMobile = brandCore.isMobileDevice();
+    const headerHeigh = $(".public-header").height() || (isMobile ? 56 : 66);
+    // floor3
+    const initData = [
+      {
+        name: "Switzerland",
+        value: [8.227512, 46.818188, 0],
+        symbolSize: [8, 12],
+        zIndex: 0,
+      },
+      {
+        name: "Estonia",
+        value: [25.013607, 58.595272, 0],
+        symbolSize: [8, 12],
+        zIndex: 1,
+      },
+      {
+        name: "Siberia",
+        value: [55.0084, 82.9357, 0],
+        symbolSize: [16, 20],
+        zIndex: 2,
+      },
+      {
+        name: "The Middle East",
+        value: [53.847818, 23.424076, 0],
+        symbolSize: [8, 12],
+        zIndex: 3,
+      },
+      {
+        name: "Malaysia",
+        value: [101.975766, 4.210484, 0],
+        symbolSize: [8, 12],
+        zIndex: 4,
+      },
+      {
+        name: "South Korea",
+        value: [127.766922, 35.907757, 0],
+        symbolSize: [8, 12],
+        zIndex: 5,
+      },
+      {
+        name: "Japan",
+        value: [138.252924, 36.204824, 0],
+        symbolSize: [8, 12],
+        zIndex: 6,
+      },
+    ];
+    let highlightIndex = -1;
+    const height = window.innerHeight - $(".public-header").height();
+    const width = window.innerWidth;
+    const heightRateWidth =  window.innerHeight / width;
+    const world = new Globe(document.getElementById("chart__container"))
+      .width(width)
+      .height(isMobile ? height : Math.max(height, 894))
+      .globeImageUrl("/static/images/web/earth/earth-night.jpg") 
+      .backgroundImageUrl("/static/images/web/earth/night-sky.png")
+      .atmosphereColor("rgba(255, 180, 255, 0.5)") // 光环颜色
+      .atmosphereAltitude(0.06) // 光环厚度，越小越窄
+      .pointOfView({
+        lat: 36.818188,
+        lng: 12.227512,
+        altitude: isMobile ? (heightRateWidth > 2.1 ? 4 : 3.2) : 2,
+      }) // 初始化地球查看视角
+      .labelsData(initData)
+      .labelLat((d) => d.value[1])
+      .labelLng((d) => d.value[0])
+      .labelText((d) => d.name)
+      .labelSize((d) => (isMobile ? 2 : 1.6))
+      .labelDotRadius((d) => (d.zIndex === highlightIndex ? 1.4 : 1))
+      .labelColor((d) => "rgba(255, 165, 0, 0.75)")
+      .labelResolution(2)
+      .enablePointerInteraction(!isMobile);
+    const controls = world.controls();
+    controls.enableZoom = false; // 禁止缩放
+    controls.enablePan = false; // 可选：禁止平移
+    controls.autoRotateSpeed = -2;
+    
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          controls.autoRotate = true;   // 或者恢复渲染
+        } else {
+          controls.autoRotate = false;  // 或者暂停渲染
+        }
+      });
+    }, { threshold: 0.1 });
+    observer.observe(document.getElementById("chart__container"));
+
+
+    // 地球旋转到特定的点，特定的点样式发生变化，
+    let lastTime = performance.now();
+    const interval = 1500; // 每 1.5 秒切换一次
+    const len = initData.length;
+    function animate(time) {
+      // time 是 rAF 提供的高精度时间戳
+      if (time - lastTime >= interval) {
+        highlightIndex = (highlightIndex + 1) % len;
+        world.labelsData(initData); // 刷新渲染
+        lastTime = time;
+      }
+      requestAnimationFrame(animate);
+    }
+    // 启动动画循环
+    requestAnimationFrame(animate);
+
+    window.addEventListener("resize", () => {
+      const newHeight = window.innerHeight - headerHeigh;
+      const newWidth = window.innerWidth;
+      world.height(newHeight);
+      world.width(newWidth);
+    });
+    // floor3 文案
+    const flexStart = "-" + headerHeigh + "px";
+    const t3 = gsap.timeline({});
+    t3.to(".floor3-mask", {
+      opacity: 1,
+      duration: 0.5,
+    })
+      .fromTo(
+        ".floor3-content .floor-title",
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          duration: 0.5,
+          y: 0,
+        },
+        "<"
+      )
+      .fromTo(
+        ".floor3-content .floor-desc",
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          duration: 0.5,
+          y: 0,
+        },
+        "<+=0.1"
+      );
+    ScrollTrigger.create({
+      animation: t3,
+      trigger: ".floor3-container",
+      start: headerHeigh + "top",
+      end: "+=1000px",
+      scrub: true,
+    });
+  });
+</script>
