@@ -2,11 +2,9 @@
   <section class="floor3-container floor-container" ref="containerRef">
     <div class="sticky">
       <div id="chart__container" ref="chartRef"></div>
-      <div class="text">
-        <p class="title">No distance is too far, and our steps will never cease.</p>
-        <p class="desc">
-          This map flashes not only geographical coordinates, but also the days we've spent together. Every stop across borders is a step towards a better future; our story is taking root and sprouting in every corner of the globe.
-        </p>
+      <div class="text" ref="textRef">
+        <p class="title">Earth: A Never-Ending Dream</p>
+        <p class="desc">The flickers on this map are more than just distant auroras and waves; they are our deepest gaze upon this planet. From the golden savannas to the neon-lit streets after rain, stories are unfolding quietly in every corner of the world.</p>
       </div>
     </div>
   </section>
@@ -15,29 +13,35 @@
 <script setup>
 import { onMounted, ref, onBeforeUnmount } from 'vue';
 import Globe from 'globe.gl';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import earthImg from '@/images/earth-night.jpg';
 import skyImg from '@/images/night-sky.png';
 
+
+gsap.registerPlugin(ScrollTrigger);
+const containerRef = ref(null);
 const chartRef = ref(null);
+const textRef = ref(null);
 const highlightIndex = ref(-1);
 let world = null;
 
 const initData = [
-  { name: "Switzerland", value: [8.227512, 46.818188, 0], zIndex: 0 },
-  { name: "Estonia", value: [25.013607, 58.595272], zIndex: 1 },
-  { name: "Siberia", value: [82.9357, 55.0084], zIndex: 2 },
-  { name: "The Middle East", value: [53.847818, 23.424076], zIndex: 3 },
-  { name: "Malaysia", value: [101.975766, 4.210484], zIndex: 4 },
-  { name: "South Korea", value: [127.766922, 35.907757], zIndex: 5 },
-  { name: "Japan", value: [140.252924, 36.204824], zIndex: 6 },
+  { name: "Antarctica", value: [0, -82.8628, 0], zIndex: 0 },
+  { name: "The Arctic", value: [0, 90, 0], zIndex: 1 },
+  { name: "Savanna", value: [34.8888, -2.3333, 0], zIndex: 2 },
+  { name: "Amazon", value: [-62.2159, -3.4653, 0], zIndex: 3 },
+  { name: "Maldives", value: [73.2207, 3.2028, 0], zIndex: 4 },
+  { name: "Cliffs of Moher", value: [-9.4309, 52.9719, 0], zIndex: 5 },
+  { name: "Prague", value: [14.4378, 50.0755, 0], zIndex: 6 },
+  { name: "Tokyo", value: [139.6503, 35.6762, 0], zIndex: 7 }
 ];
-
 
 onMounted(() => {
   const width = window.innerWidth;
   const height = window.innerHeight
 
-  // 1. 初始化地球
+  // 初始化地球
   world = Globe()(chartRef.value)
     .width(width) // 设置地球画布的宽度
     .height(height)
@@ -48,7 +52,7 @@ onMounted(() => {
     .pointOfView({
       lat: 36.818188, // 设置相机初始化时正对着的经纬度
       lng: 12.227512,
-      altitude: 3, // 相机距离地表的高度
+      altitude: 2.5, // 相机距离地表的高度
     })
     .labelsData(initData)  // 注入数据源
     .labelLat(d => d.value[1]) // 数据里的纬度在 value 数组的第 2 个位置
@@ -67,7 +71,7 @@ onMounted(() => {
   controls.autoRotate = true; // 开启自动旋转
   controls.autoRotateSpeed = -1; // 设置旋转速度和方向 负值代表是逆时针
 
-  // 2. 自动高亮循环 
+  // 自动高亮循环 
   const interval = setInterval(() => {
     window.requestIdleCallback(() => {
       highlightIndex.value = (highlightIndex.value + 1) % initData.length;
@@ -75,7 +79,22 @@ onMounted(() => {
     });
   }, 2000);
 
-  // 4. 监听窗口变化
+  // GSAP 滚动动画逻辑
+  gsap.fromTo(textRef.value,
+    { y: 100, opacity: 0, zIndex: -1 },
+    {
+      y: 0, opacity: 0.8, duration: 1, zIndex: 1,
+      scrollTrigger: {
+        trigger: containerRef.value,
+        start: "top top",
+        end: "+=50%",
+        scrub: 1,
+        markers: false
+      }
+    }
+  );
+
+  // 监听窗口变化
   const handleResize = () => {
     world.width(window.innerWidth);
     world.height(window.innerHeight);
@@ -92,17 +111,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-:root {
-  --base: 1920;
-}
-
-html {
-  font-size: calc(10 / var(--base) * 100vw);
-}
-
 #chart__container {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .sticky {
@@ -119,14 +131,16 @@ html {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  width: 162rem;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 6rem;
 }
 
-.desc{
-  font-size: 1.2rem;
+.desc {
+  font-size: 3rem;
+  margin-top: 3rem;
 }
 
 .floor-container {
@@ -142,7 +156,7 @@ html {
 
 <route lang="json">{
   "meta": {
-    "title": "全球足迹分布图",
+    "title": "3D 地球仪",
     "category": "animation",
     "tag": "动效"
   }
